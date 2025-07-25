@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Will You Forgive Me?</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background-color: #ffe6f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background-image: linear-gradient(to bottom right, #ffe6f2, #ffb6c1, #ffe6f2);
+        }
+        
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            max-width: 90%;
+            position: relative;
+            border: 3px solid #ff4d6d;
+        }
+        
+        h1 {
+            color: #ff4d6d;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            text-shadow: 2px 2px 4px rgba(255, 77, 109, 0.3);
+        }
+        
+        .message {
+            color: #ff758f;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+            font-style: italic;
+        }
+        
+        .buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        #yes-btn {
+            background-color: #ff4d6d;
+            color: white;
+            font-size: 1.4rem;
+            padding: 18px 45px;
+        }
+        
+        #no-btn {
+            background-color: #c5c5c5;
+            color: #333;
+            position: relative;
+            font-size: 0.9rem;
+        }
+        
+        .anger-meter-container {
+            display: none;
+            margin-top: 30px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .anger-meter-label {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #ff4d6d;
+        }
+        
+        .anger-meter {
+            height: 30px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        
+        .anger-meter-fill {
+            height: 100%;
+            background-color: #ff4d6d;
+            width: 100%;
+            transition: width 0.3s ease-in-out;
+        }
+        
+        .anger-emoji-container {
+            display: flex;
+            justify-content: space-between;
+            margin: 15px 0;
+        }
+        
+        .anger-emoji {
+            font-size: 1.8rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .anger-emoji:hover {
+            transform: scale(1.2);
+        }
+        
+        .anger-level-slider {
+            width: 100%;
+            margin: 20px 0;
+        }
+        
+        .submit-anger-btn {
+            background-color: #ff4d6d;
+            color: white;
+            margin-top: 15px;
+        }
+        
+        .final-message {
+            display: none;
+            margin-top: 30px;
+            font-size: 1.5rem;
+            color: #ff4d6d;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Mobile responsiveness */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .message {
+                font-size: 1rem;
+            }
+            
+            button {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+            
+            #yes-btn {
+                font-size: 1.2rem;
+                padding: 15px 35px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .anger-meter-label {
+                font-size: 1rem;
+            }
+            
+            .final-message {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>😔 I'm Sorry 😔</h1>
+        <p class="message">I know I upset you, and I'm really sorry. Will you forgive me?</p>
+        <div class="buttons">
+            <button id="yes-btn">Yes, I forgive you ❤️</button>
+            <button id="no-btn">Nope 😤</button>
+        </div>
+        
+        <div class="anger-meter-container" id="anger-meter-container">
+            <div class="anger-meter-label">
+                <span id="anger-level-text">How angry are you? Select your anger level</span> <span id="anger-emoji">😠</span>
+            </div>
+            
+            <div class="anger-emoji-container">
+                <div class="anger-emoji" data-level="100">😊</div>
+                <div class="anger-emoji" data-level="75">🙂</div>
+                <div class="anger-emoji" data-level="50">😐</div>
+                <div class="anger-emoji" data-level="25">😠</div>
+                <div class="anger-emoji" data-level="0">😡</div>
+            </div>
+            
+            <input type="range" min="0" max="100" value="100" class="anger-level-slider" id="anger-level-slider">
+            
+            <div class="anger-meter">
+                <div class="anger-meter-fill" id="anger-meter-fill"></div>
+            </div>
+            
+            <button class="submit-anger-btn" id="submit-anger-btn">Submit My Feelings</button>
+        </div>
+        
+        <div class="final-message" id="final-message">
+            Phew 😅 You've forgiven me! I'll make it up to you, promise ❤️
+        </div>
+    </div>
+    
+    <script>
+        // No button functionality - moves away when hovered or clicked
+        const noBtn = document.getElementById('no-btn');
+        let noBtnClicks = 0;
+        const noBtnTexts = [
+            "Nope 😤",
+            "Really?",
+            "Still mad?",
+            "Okay okay 😅",
+            "Please?",
+            "I'm begging you!",
+            "Don't be like that!",
+            "I'll do anything!",
+            "Pretty please?",
+            "Last chance!"
+        ];
+        
+        function moveButton() {
+            const containerRect = document.querySelector('.container').getBoundingClientRect();
+            const btnRect = noBtn.getBoundingClientRect();
+            
+            // Calculate new position within container boundaries
+            const maxX = containerRect.width - btnRect.width;
+            const maxY = containerRect.height - btnRect.height;
+            
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = `${randomX}px`;
+            noBtn.style.top = `${randomY}px`;
+            
+            // Change the text of the button each time
+            noBtnClicks++;
+            if (noBtnClicks < noBtnTexts.length) {
+                noBtn.textContent = noBtnTexts[noBtnClicks];
+            } else {
+                // If we've gone through all texts, make the button smaller each time
+                const currentSize = parseFloat(window.getComputedStyle(noBtn).fontSize);
+                noBtn.style.fontSize = `${currentSize * 0.9}px`;
+                noBtn.style.padding = `${parseFloat(window.getComputedStyle(noBtn).paddingTop) * 0.9}px ${parseFloat(window.getComputedStyle(noBtn).paddingLeft) * 0.9}px`;
+            }
+            
+            // Make the Yes button slightly bigger each time
+            const currentYesSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = `${currentYesSize * 1.05}px`;
+            yesBtn.style.padding = `${parseFloat(window.getComputedStyle(yesBtn).paddingTop) * 1.05}px ${parseFloat(window.getComputedStyle(yesBtn).paddingLeft) * 1.05}px`;
+        }
+        
+        noBtn.addEventListener('mouseover', moveButton);
+        noBtn.addEventListener('click', moveButton);
+        
+        // Yes button functionality - show interactive anger meter
+        const yesBtn = document.getElementById('yes-btn');
+        const angerMeterContainer = document.getElementById('anger-meter-container');
+        const angerMeterFill = document.getElementById('anger-meter-fill');
+        const angerLevelText = document.getElementById('anger-level-text');
+        const angerEmoji = document.getElementById('anger-emoji');
+        const finalMessage = document.getElementById('final-message');
+        const buttons = document.querySelector('.buttons');
+        const angerLevelSlider = document.getElementById('anger-level-slider');
+        const submitAngerBtn = document.getElementById('submit-anger-btn');
+        const angerEmojis = document.querySelectorAll('.anger-emoji');
+        
+        // Update the anger meter based on slider value
+        function updateAngerMeter(value) {
+            angerMeterFill.style.width = `${value}%`;
+            angerLevelText.textContent = `Anger Level: ${value}%`;
+            
+            // Update the emoji based on anger level
+            if (value >= 75) {
+                angerEmoji.textContent = '😡';
+            } else if (value >= 50) {
+                angerEmoji.textContent = '😠';
+            } else if (value >= 25) {
+                angerEmoji.textContent = '😐';
+            } else if (value > 0) {
+                angerEmoji.textContent = '🙂';
+            } else {
+                angerEmoji.textContent = '😊';
+            }
+        }
+        
+        // When yes button is clicked, show the anger meter
+        yesBtn.addEventListener('click', () => {
+            // Hide the buttons
+            buttons.style.display = 'none';
+            
+            // Show the anger meter
+            angerMeterContainer.style.display = 'block';
+            
+            // Set initial anger level
+            updateAngerMeter(100);
+        });
+        
+        // When slider is moved, update the anger meter
+        angerLevelSlider.addEventListener('input', function() {
+            const value = this.value;
+            updateAngerMeter(value);
+        });
+        
+        // When emoji is clicked, set the anger level
+        angerEmojis.forEach(emoji => {
+            emoji.addEventListener('click', function() {
+                const level = this.getAttribute('data-level');
+                angerLevelSlider.value = level;
+                updateAngerMeter(level);
+            });
+        });
+        
+        // When submit button is clicked, show the final message
+        submitAngerBtn.addEventListener('click', () => {
+            // Hide the anger meter
+            angerMeterContainer.style.display = 'none';
+            
+            // Show the final message
+            finalMessage.style.display = 'block';
+            
+            // Customize final message based on anger level
+            const angerLevel = parseInt(angerLevelSlider.value);
+            if (angerLevel >= 75) {
+                finalMessage.textContent = "I understand you're still very upset. I'll work hard to make it up to you! ❤️";
+            } else if (angerLevel >= 50) {
+                finalMessage.textContent = "Thanks for being honest. I'll do better next time, promise! ❤️";
+            } else if (angerLevel >= 25) {
+                finalMessage.textContent = "I'm glad you're not too angry. Let's move forward together! ❤️";
+            } else {
+                finalMessage.textContent = "Phew 😅 You're not angry at all! You're the best! ❤️";
+            }
+        });
+        
+        // Allow clicking directly on the anger meter to set level
+        document.querySelector('.anger-meter').addEventListener('click', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const percentage = Math.round((x / rect.width) * 100);
+            
+            angerLevelSlider.value = percentage;
+            updateAngerMeter(percentage);
+        });
+    </script>
+</body>
+</html>
